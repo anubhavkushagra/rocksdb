@@ -55,3 +55,12 @@ target_link_libraries(conflict_test ${GRPC_LIBRARIES} ${PROTOBUF_LIBRARIES} Thre
 # Update these two lines to include OpenSSL at the end
 target_link_libraries(kv_server grpc++ grpc protobuf rocksdb OpenSSL::SSL OpenSSL::Crypto)
 target_link_libraries(kv_client grpc++ grpc protobuf OpenSSL::SSL OpenSSL::Crypto)
+
+# 6. Redis Server
+add_executable(redis_server
+    server/redis_server.cpp
+    "${GEN_DIR}/kv.pb.cc"
+    "${GEN_DIR}/kv.grpc.pb.cc"
+)
+target_link_libraries(redis_server ${GRPC_LIBRARIES} ${PROTOBUF_LIBRARIES} Threads::Threads hiredis)
+target_link_libraries(redis_server grpc++ grpc protobuf OpenSSL::SSL OpenSSL::Crypto)

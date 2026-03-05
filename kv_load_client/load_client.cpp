@@ -35,14 +35,17 @@ public:
     std::atomic<bool> running{true};
 
     void print_final_stats(int threads, int batch_sz, int duration) {
-        std::cout << "\n[!] Benchmark started. Running for " << duration << " seconds...\n";
-        std::this_thread::sleep_for(std::chrono::seconds(duration));
-        running = false;
 
         long p = puts.load(), g = gets.load(), d = deletes.load();
         long total = p + g + d;
         double throughput = (double)total / duration;
-        double avg_lat = (total > 0) ? (double)latency_sum_us / (total / batch_sz) : 0;
+
+        // THE FIX: Calculate true average Round-Trip Time per network packet (RPC)
+        long total_rpcs = total / batch_sz;
+        double avg_rpc_lat_ms = (total_rpcs > 0) ? ((double)latency_sum_us / 1000.0) / total_rpcs : 0;
+        
+        // Amortized Per-Operation Latency (total time distributed across all keys in the batch)
+        double avg_op_lat_ms = (total > 0) ? ((double)latency_sum_us / 1000.0) / total : 0;
 
         std::cout << "\n\033[1;36m" << "================== FINAL BENCHMARK REPORT ==================" << "\033[0m\n";
         std::cout << std::left << std::setw(30) << "METRIC" << "VALUE" << "\n";
@@ -58,8 +61,9 @@ public:
         std::cout << std::setw(30) << "TOTAL OPERATIONS" << total << "\n";
         std::cout << std::setw(30) << "FAILED RPCs" << "\033[1;31m" << errors.load() << "\033[0m\n";
         std::cout << "------------------------------------------------------------\n";
-        std::cout << " THROUGHPUT:   \033[1;32m" << (long)throughput << " ops/sec\033[0m\n";
-        std::cout << " AVG LATENCY:  " << (int)avg_lat << " us per batch\n";
+        std::cout << " THROUGHPUT:          \033[1;32m" << (long)throughput << " ops/sec\033[0m\n";
+        std::cout << " TRUE BATCH RTT:      " << std::fixed << std::setprecision(4) << avg_rpc_lat_ms << " ms per network round-trip\n";
+        std::cout << " AVG OP LATENCY:      " << std::fixed << std::setprecision(4) << avg_op_lat_ms << " ms per individual operation\n";
         std::cout << "============================================================\n\n";
     }
 };
@@ -335,7 +339,7 @@ std::string FetchJWT(kv::KVService::Stub* stub) {
         std::cout << "SUCCESS: Secured JWT Token." << std::endl;
         return resp.jwt_token();
     } else {
-        std::cerr << "CRITICAL LOGIN ERROR!" << std::endl;
+        std::cerr << "CRITICAL LOGIN ERROR! status: " << status.error_message() << " (code: " << status.error_code() << ") msg: " << resp.error_message() << std::endl;
         exit(1);
     }
 }
@@ -394,8 +398,12 @@ void Worker(kv::KVService::Stub* stub, Benchmarker* bm, int inflight, int batch_
         }
         
         delete call;
-        if (bm->running) spawn();
-        else break;
+        if (bm->running) {
+            spawn();
+        } else {
+            // Signal the queue to shut down so we don't hang!
+            cq.Shutdown();
+        }
     }
 
     // Flush private counters to global atomic ONCE at the very end
@@ -406,11 +414,66 @@ void Worker(kv::KVService::Stub* stub, Benchmarker* bm, int inflight, int batch_
     bm->latency_sum_us += local_latency_sum_us;
 }
 
+void PrefeedWorker(kv::KVService::Stub* stub, const std::string& jwt_token, int thread_id, int num_threads, int total_keys) {
+    grpc::CompletionQueue cq;
+    int keys_per_thread = total_keys / num_threads;
+    int start_idx = thread_id * keys_per_thread;
+    int end_idx = start_idx + keys_per_thread;
+    int batch_sz = 500;
+    
+    auto spawn = [&](int current_idx) {
+        if (current_idx >= end_idx) return false;
+        auto* call = new AsyncCall;
+        call->ctx.AddMetadata("authorization", jwt_token);
+
+        kv::BatchRequest req;
+        for (int i = 0; i < batch_sz && current_idx + i < end_idx; i++) {
+            auto* e = req.add_entries();
+            char key_buf[32];
+            snprintf(key_buf, sizeof(key_buf), "k_%d", current_idx + i);
+            e->set_key(key_buf);
+            e->set_type(kv::PUT);
+            e->set_value(std::string(100, 'v')); // 100-byte value
+        }
+        
+        call->reader = stub->PrepareAsyncExecuteBatch(&call->ctx, req, &cq);
+        call->reader->StartCall();
+        call->reader->Finish(&call->reply, &call->status, (void*)call);
+        return true;
+    };
+
+    int inflight = 50;
+    int dispatched = start_idx;
+    for (int i = 0; i < inflight; i++) {
+        if (spawn(dispatched)) dispatched += batch_sz;
+    }
+
+    void* tag; bool ok;
+    while (cq.Next(&tag, &ok)) {
+        AsyncCall* call = static_cast<AsyncCall*>(tag);
+        delete call;
+        if (dispatched < end_idx) {
+            spawn(dispatched);
+            dispatched += batch_sz;
+        } else {
+            cq.Shutdown(); // ensure we exit cleanly
+        }
+    }
+}
+
 int main(int argc, char** argv) {
     int threads = (argc > 1) ? std::stoi(argv[1]) : 16;
     int batch_sz = (argc > 2) ? std::stoi(argv[2]) : 500;
     int inflight = (argc > 3) ? std::stoi(argv[3]) : 100;
-    int duration = 10;
+    int duration = 3600; // hour
+
+    bool do_prefeed = false;
+    for (int i = 1; i < argc; ++i) {
+        if (std::string(argv[i]) == "--prefeed") {
+            do_prefeed = true;
+            break;
+        }
+    }
 
     grpc::SslCredentialsOptions ssl_opts;
     ssl_opts.pem_root_certs = ReadFile("server.crt"); 
@@ -420,6 +483,21 @@ int main(int argc, char** argv) {
     
     std::string dynamic_jwt = FetchJWT(stub.get());
     
+    // --- PRE-FEED PHASE ---
+    if (do_prefeed) {
+        int prefeed_keys = 1000000;
+        std::cout << "[!] Pre-feeding database with " << prefeed_keys << " keys..." << std::endl;
+        std::vector<std::thread> prefeeders;
+        for (int i = 0; i < 16; i++) {
+            prefeeders.emplace_back(PrefeedWorker, stub.get(), dynamic_jwt, i, 16, prefeed_keys);
+        }
+        for (auto& t : prefeeders) t.join();
+        std::cout << "[!] Pre-feed complete. Database now contains " << prefeed_keys << " real keys." << std::endl;
+    } else {
+        std::cout << "[!] Skipping pre-feed. Benchmarking existing clustered database..." << std::endl;
+    }
+    // ----------------------
+
     Benchmarker bm;
     std::vector<std::thread> workers;
 

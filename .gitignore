@@ -1,0 +1,30 @@
+# Build artifacts
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.o
+*.a
+*.so
+
+# Compiled binaries
+kv_server
+kv_client
+redis_server
+storage_server
+distributed_app_server
+distributed_load_client
+
+# RocksDB data directory
+data/
+
+# SSL private key (NEVER push this to GitHub!)
+server.key
+
+# Misc
+*.log
+.DS_Store
+
+# The 3tier subfolder (separate repo)
+rocksdb3tier/

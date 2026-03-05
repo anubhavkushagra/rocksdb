@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/conflict_test.dir/kv_load_client/conflict_test.cpp.o CMakeFiles/conflict_test.dir/generated/kv.pb.cc.o CMakeFiles/conflict_test.dir/generated/kv.grpc.pb.cc.o -o conflict_test  -lgrpc++ -lgrpc -lgpr -lprotobuf 

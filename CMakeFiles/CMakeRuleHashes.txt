@@ -1,2 +1,0 @@
-# Hashes of file build rules.
-d070bd663e0a5ba594c46fff14356b7d generated/kv.pb.cc

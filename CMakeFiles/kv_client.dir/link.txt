@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/kv_client.dir/kv_load_client/load_client.cpp.o CMakeFiles/kv_client.dir/generated/kv.pb.cc.o CMakeFiles/kv_client.dir/generated/kv.grpc.pb.cc.o -o kv_client  -lgrpc++ -lgrpc -lgpr -lprotobuf -lgrpc++ -lgrpc -lprotobuf /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so -lgpr 

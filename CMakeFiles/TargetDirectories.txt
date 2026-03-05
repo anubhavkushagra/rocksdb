@@ -1,5 +1,0 @@
-/home/anubhav/kv_server/CMakeFiles/kv_server.dir
-/home/anubhav/kv_server/CMakeFiles/kv_client.dir
-/home/anubhav/kv_server/CMakeFiles/conflict_test.dir
-/home/anubhav/kv_server/CMakeFiles/edit_cache.dir
-/home/anubhav/kv_server/CMakeFiles/rebuild_cache.dir
