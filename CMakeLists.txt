@@ -64,3 +64,30 @@ add_executable(redis_server
 )
 target_link_libraries(redis_server ${GRPC_LIBRARIES} ${PROTOBUF_LIBRARIES} Threads::Threads hiredis)
 target_link_libraries(redis_server grpc++ grpc protobuf OpenSSL::SSL OpenSSL::Crypto)
+
+# 7. Distributed Storage Server (RocksDB Only)
+add_executable(storage_server
+    server/storage_server.cpp
+    "${GEN_DIR}/kv.pb.cc"
+    "${GEN_DIR}/kv.grpc.pb.cc"
+)
+target_link_libraries(storage_server ${GRPC_LIBRARIES} ${PROTOBUF_LIBRARIES} Threads::Threads)
+target_link_libraries(storage_server grpc++ grpc protobuf rocksdb OpenSSL::SSL OpenSSL::Crypto)
+
+# 8. Distributed App Server (TLS/JWT Proxy)
+add_executable(distributed_app_server
+    server/distributed_app_server.cpp
+    "${GEN_DIR}/kv.pb.cc"
+    "${GEN_DIR}/kv.grpc.pb.cc"
+)
+target_link_libraries(distributed_app_server ${GRPC_LIBRARIES} ${PROTOBUF_LIBRARIES} Threads::Threads)
+target_link_libraries(distributed_app_server grpc++ grpc protobuf OpenSSL::SSL OpenSSL::Crypto)
+
+# 9. Distributed Load Client
+add_executable(distributed_load_client
+    kv_load_client/distributed_load_client.cpp
+    "${GEN_DIR}/kv.pb.cc"
+    "${GEN_DIR}/kv.grpc.pb.cc"
+)
+target_link_libraries(distributed_load_client ${GRPC_LIBRARIES} ${PROTOBUF_LIBRARIES} Threads::Threads)
+target_link_libraries(distributed_load_client grpc++ grpc protobuf OpenSSL::SSL OpenSSL::Crypto)

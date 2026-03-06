@@ -143,19 +143,6 @@ kv_client/fast:
 .PHONY : kv_client/fast
 
 #=============================================================================
-# Target rules for targets named distributed_load_client
-
-# Build rule for target.
-distributed_load_client: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 distributed_load_client
-.PHONY : distributed_load_client
-
-# fast build rule for target.
-distributed_load_client/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/build
-.PHONY : distributed_load_client/fast
-
-#=============================================================================
 # Target rules for targets named conflict_test
 
 # Build rule for target.
@@ -181,6 +168,45 @@ redis_server/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis_server.dir/build.make CMakeFiles/redis_server.dir/build
 .PHONY : redis_server/fast
 
+#=============================================================================
+# Target rules for targets named storage_server
+
+# Build rule for target.
+storage_server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 storage_server
+.PHONY : storage_server
+
+# fast build rule for target.
+storage_server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/build
+.PHONY : storage_server/fast
+
+#=============================================================================
+# Target rules for targets named distributed_app_server
+
+# Build rule for target.
+distributed_app_server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 distributed_app_server
+.PHONY : distributed_app_server
+
+# fast build rule for target.
+distributed_app_server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/build
+.PHONY : distributed_app_server/fast
+
+#=============================================================================
+# Target rules for targets named distributed_load_client
+
+# Build rule for target.
+distributed_load_client: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 distributed_load_client
+.PHONY : distributed_load_client
+
+# fast build rule for target.
+distributed_load_client/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/build
+.PHONY : distributed_load_client/fast
+
 generated/kv.grpc.pb.o: generated/kv.grpc.pb.cc.o
 .PHONY : generated/kv.grpc.pb.o
 
@@ -188,9 +214,11 @@ generated/kv.grpc.pb.o: generated/kv.grpc.pb.cc.o
 generated/kv.grpc.pb.cc.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_server.dir/build.make CMakeFiles/kv_server.dir/generated/kv.grpc.pb.cc.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_client.dir/build.make CMakeFiles/kv_client.dir/generated/kv.grpc.pb.cc.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.grpc.pb.cc.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/conflict_test.dir/build.make CMakeFiles/conflict_test.dir/generated/kv.grpc.pb.cc.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis_server.dir/build.make CMakeFiles/redis_server.dir/generated/kv.grpc.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/generated/kv.grpc.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/generated/kv.grpc.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.grpc.pb.cc.o
 .PHONY : generated/kv.grpc.pb.cc.o
 
 generated/kv.grpc.pb.i: generated/kv.grpc.pb.cc.i
@@ -200,9 +228,11 @@ generated/kv.grpc.pb.i: generated/kv.grpc.pb.cc.i
 generated/kv.grpc.pb.cc.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_server.dir/build.make CMakeFiles/kv_server.dir/generated/kv.grpc.pb.cc.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_client.dir/build.make CMakeFiles/kv_client.dir/generated/kv.grpc.pb.cc.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.grpc.pb.cc.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/conflict_test.dir/build.make CMakeFiles/conflict_test.dir/generated/kv.grpc.pb.cc.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis_server.dir/build.make CMakeFiles/redis_server.dir/generated/kv.grpc.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/generated/kv.grpc.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/generated/kv.grpc.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.grpc.pb.cc.i
 .PHONY : generated/kv.grpc.pb.cc.i
 
 generated/kv.grpc.pb.s: generated/kv.grpc.pb.cc.s
@@ -212,9 +242,11 @@ generated/kv.grpc.pb.s: generated/kv.grpc.pb.cc.s
 generated/kv.grpc.pb.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_server.dir/build.make CMakeFiles/kv_server.dir/generated/kv.grpc.pb.cc.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_client.dir/build.make CMakeFiles/kv_client.dir/generated/kv.grpc.pb.cc.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.grpc.pb.cc.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/conflict_test.dir/build.make CMakeFiles/conflict_test.dir/generated/kv.grpc.pb.cc.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis_server.dir/build.make CMakeFiles/redis_server.dir/generated/kv.grpc.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/generated/kv.grpc.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/generated/kv.grpc.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.grpc.pb.cc.s
 .PHONY : generated/kv.grpc.pb.cc.s
 
 generated/kv.pb.o: generated/kv.pb.cc.o
@@ -224,9 +256,11 @@ generated/kv.pb.o: generated/kv.pb.cc.o
 generated/kv.pb.cc.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_server.dir/build.make CMakeFiles/kv_server.dir/generated/kv.pb.cc.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_client.dir/build.make CMakeFiles/kv_client.dir/generated/kv.pb.cc.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.pb.cc.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/conflict_test.dir/build.make CMakeFiles/conflict_test.dir/generated/kv.pb.cc.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis_server.dir/build.make CMakeFiles/redis_server.dir/generated/kv.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/generated/kv.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/generated/kv.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.pb.cc.o
 .PHONY : generated/kv.pb.cc.o
 
 generated/kv.pb.i: generated/kv.pb.cc.i
@@ -236,9 +270,11 @@ generated/kv.pb.i: generated/kv.pb.cc.i
 generated/kv.pb.cc.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_server.dir/build.make CMakeFiles/kv_server.dir/generated/kv.pb.cc.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_client.dir/build.make CMakeFiles/kv_client.dir/generated/kv.pb.cc.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.pb.cc.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/conflict_test.dir/build.make CMakeFiles/conflict_test.dir/generated/kv.pb.cc.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis_server.dir/build.make CMakeFiles/redis_server.dir/generated/kv.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/generated/kv.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/generated/kv.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.pb.cc.i
 .PHONY : generated/kv.pb.cc.i
 
 generated/kv.pb.s: generated/kv.pb.cc.s
@@ -248,9 +284,11 @@ generated/kv.pb.s: generated/kv.pb.cc.s
 generated/kv.pb.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_server.dir/build.make CMakeFiles/kv_server.dir/generated/kv.pb.cc.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_client.dir/build.make CMakeFiles/kv_client.dir/generated/kv.pb.cc.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.pb.cc.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/conflict_test.dir/build.make CMakeFiles/conflict_test.dir/generated/kv.pb.cc.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/redis_server.dir/build.make CMakeFiles/redis_server.dir/generated/kv.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/generated/kv.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/generated/kv.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_load_client.dir/build.make CMakeFiles/distributed_load_client.dir/generated/kv.pb.cc.s
 .PHONY : generated/kv.pb.cc.s
 
 kv_load_client/conflict_test.o: kv_load_client/conflict_test.cpp.o
@@ -325,6 +363,30 @@ kv_load_client/load_client.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_client.dir/build.make CMakeFiles/kv_client.dir/kv_load_client/load_client.cpp.s
 .PHONY : kv_load_client/load_client.cpp.s
 
+server/distributed_app_server.o: server/distributed_app_server.cpp.o
+.PHONY : server/distributed_app_server.o
+
+# target to build an object file
+server/distributed_app_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/server/distributed_app_server.cpp.o
+.PHONY : server/distributed_app_server.cpp.o
+
+server/distributed_app_server.i: server/distributed_app_server.cpp.i
+.PHONY : server/distributed_app_server.i
+
+# target to preprocess a source file
+server/distributed_app_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/server/distributed_app_server.cpp.i
+.PHONY : server/distributed_app_server.cpp.i
+
+server/distributed_app_server.s: server/distributed_app_server.cpp.s
+.PHONY : server/distributed_app_server.s
+
+# target to generate assembly for a file
+server/distributed_app_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/distributed_app_server.dir/build.make CMakeFiles/distributed_app_server.dir/server/distributed_app_server.cpp.s
+.PHONY : server/distributed_app_server.cpp.s
+
 server/redis_server.o: server/redis_server.cpp.o
 .PHONY : server/redis_server.o
 
@@ -373,6 +435,30 @@ server/server.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kv_server.dir/build.make CMakeFiles/kv_server.dir/server/server.cpp.s
 .PHONY : server/server.cpp.s
 
+server/storage_server.o: server/storage_server.cpp.o
+.PHONY : server/storage_server.o
+
+# target to build an object file
+server/storage_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/server/storage_server.cpp.o
+.PHONY : server/storage_server.cpp.o
+
+server/storage_server.i: server/storage_server.cpp.i
+.PHONY : server/storage_server.i
+
+# target to preprocess a source file
+server/storage_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/server/storage_server.cpp.i
+.PHONY : server/storage_server.cpp.i
+
+server/storage_server.s: server/storage_server.cpp.s
+.PHONY : server/storage_server.s
+
+# target to generate assembly for a file
+server/storage_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage_server.dir/build.make CMakeFiles/storage_server.dir/server/storage_server.cpp.s
+.PHONY : server/storage_server.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -382,10 +468,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... conflict_test"
+	@echo "... distributed_app_server"
 	@echo "... distributed_load_client"
 	@echo "... kv_client"
 	@echo "... kv_server"
 	@echo "... redis_server"
+	@echo "... storage_server"
 	@echo "... generated/kv.grpc.pb.o"
 	@echo "... generated/kv.grpc.pb.i"
 	@echo "... generated/kv.grpc.pb.s"
@@ -401,12 +489,18 @@ help:
 	@echo "... kv_load_client/load_client.o"
 	@echo "... kv_load_client/load_client.i"
 	@echo "... kv_load_client/load_client.s"
+	@echo "... server/distributed_app_server.o"
+	@echo "... server/distributed_app_server.i"
+	@echo "... server/distributed_app_server.s"
 	@echo "... server/redis_server.o"
 	@echo "... server/redis_server.i"
 	@echo "... server/redis_server.s"
 	@echo "... server/server.o"
 	@echo "... server/server.i"
 	@echo "... server/server.s"
+	@echo "... server/storage_server.o"
+	@echo "... server/storage_server.i"
+	@echo "... server/storage_server.s"
 .PHONY : help
 
 
