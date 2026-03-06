@@ -1,0 +1,39 @@
+syntax = "proto3";
+package kv;
+
+enum OpType {
+  PUT = 0;
+  GET = 1;
+  DELETE = 2;
+}
+
+message KVEntry {
+  OpType type = 1;
+  string key = 2;
+  string value = 3;
+}
+
+message BatchRequest {
+  repeated KVEntry entries = 1;
+}
+
+message BatchResponse {
+  repeated string values = 1;
+  bool success = 2;
+}
+
+message LoginRequest {
+  string client_id = 1;
+  string api_key = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string jwt_token = 2;
+  string error_message = 3;
+}
+
+service KVService {
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc ExecuteBatch(BatchRequest) returns (BatchResponse) {}
+}
